@@ -310,6 +310,8 @@ void AES_128_encrypt(u8 *ct , u8 *pt ) {
 #define MODE_ODER_5     5     // not implemented yet
 // ----------------------------------------------------------------------------
 
+int slot_mapping[16] = {0, 5, 10, 15, 1, 6, 11, 12, 2, 7, 8, 13, 3, 4, 9, 14};
+
 // ----------------------------------------------------------------------------
 // Global variables:
 // ----------------------------------------------------------------------------
@@ -371,10 +373,10 @@ void init_operand_recoding() {
 }
 
 
-void generate_traces(int mode, int byte)
+void generate_traces(int mode)
 {
-  char  file_name[100];
-  FILE* trace_file;
+  char  file_name[16][100];
+  FILE* trace_file[16];
   u32   trace[MAX_TRACE_SIZE];
   u32   TRACE_SIZE;
 
@@ -382,24 +384,27 @@ void generate_traces(int mode, int byte)
   time_t start = time(0);
 
   // open trace files
-  int n = sprintf(file_name, "traces_");
+  for (int byte = 0; byte < 16; byte++) {
+    int n = sprintf(file_name[byte], "traces_");
 
-  if (mode == MODE_ODER_FULL) {
-    n += sprintf(file_name+n,"OF_");
-  } else {
-    n += sprintf(file_name+n,"O%d_",mode);
+    if (mode == MODE_ODER_FULL) {
+      n += sprintf(file_name[byte]+n,"OF_");
+    } else {
+      n += sprintf(file_name[byte]+n,"O%d_",mode);
+    }
+    n += sprintf(file_name[byte] + n,
+		 "NOp%02d_%02d_NTr%d_byte%02d_loop18.tr",
+		 HODCA_NBO_MIN, HODCA_NBO_MAX, NB_TRACES, byte);
+    printf("open file %s\n", file_name[byte]);
+    trace_file[byte] = fopen(file_name[byte], "wb");
   }
 
-  n += sprintf(file_name+n,"NOp%02d_%02d_NTr%d_byte%02d_loop18.tr",
-               HODCA_NBO_MIN, HODCA_NBO_MAX, NB_TRACES, byte);
-  printf("open file %s\n", file_name);
-
-  trace_file = fopen(file_name,"wb");
   printf("generating traces...\n");
-
   for (int t=0; t<NB_TRACES; t++) {
     if ((t % (NB_TRACES/100) == 0) && (t > 0)) {
-      fflush(trace_file);
+      for (int byte = 0; byte < 16; byte++) {
+	fflush(trace_file[byte]);
+      }
       time_t cur = time(0);
       double time = difftime(cur, start) / 60;
       printf("\t%6d / %d  > used time: %3.2f minutes \n", t, NB_TRACES, time);
@@ -421,50 +426,54 @@ void generate_traces(int mode, int byte)
 
       if ((nbo <= HODCA_NBO_MAX) && (nbo >= HODCA_NBO_MIN)) {
         switch (mode) {
-          case MODE_ODER_FULL:
+	case MODE_ODER_FULL:
           acc = 0;
 
           for (int k=0; k<nbo; k++) {
-           acc ^= acc_operands[i][k];
-         }
+	    acc ^= acc_operands[i][k];
+	  }
 
-         if (j >= MAX_TRACE_SIZE) {
-           printf("Trace exceeds max size!!!\n"); exit(0);
-         }
+	  if (j >= MAX_TRACE_SIZE) {
+	    printf("Trace exceeds max size!!!\n"); exit(0);
+	  }
 
-         trace[j] = (acc>>byte) & 1;
-         j++;
-         break;
+	  trace[j] = acc;
+	  j++;
+	  break;
 
-         default:
-         printf("Invalid HODCA mode !!\n");
-         exit(0);
-       }
-     }
-   }
+	default:
+	  printf("Invalid HODCA mode !!\n");
+	  exit(0);
+	}
+      }
+    }
 
     TRACE_SIZE = j;
     // write nb. traces and trace size in file (before first trace)
-    if (t==0) {
+    if (t == 0) {
       printf("trace size for loop %d: %d\n", 18, TRACE_SIZE);
-      fprintf(trace_file, "%d %d 1\n",NB_TRACES, TRACE_SIZE);
+      for (int byte = 0; byte < 16; byte++) {
+	fprintf(trace_file[byte], "%d %d 1\n", NB_TRACES, TRACE_SIZE);
+      }
     }
 
     // write plaintext in file
-    fwrite(pt[t], 1, 16, trace_file);
-    fwrite(ct[t], 1, 16, trace_file);
 
-    // write trace in file
-    for (int i=0; i<TRACE_SIZE; i++) {
-      u8 sample = (u8) trace[i];
-      fputc(sample, trace_file);
+    for (int byte = 0; byte < 16; byte++) {
+      fwrite(pt[t], 1, 16, trace_file[byte]);
+      fwrite(ct[t], 1, 16, trace_file[byte]);
+
+      // write trace in file
+      for (int i=0; i<TRACE_SIZE; i++) {
+	u8 sample = (u8)(trace[i] >> slot_mapping[byte]) & 1;
+	fputc(sample, trace_file[byte]);
+      }
     }
-
   }
 
   // close trace files
-  for (int l=TARGET_LOOP_INF; l<=TARGET_LOOP_SUP; ++l) {
-    fclose(trace_file);
-    printf("close file %s\n",file_name);
+  for (int byte = 0; byte < 16; byte++) {
+    fclose(trace_file[byte]);
+    printf("close file %s\n", file_name[byte]);
   }
 }
