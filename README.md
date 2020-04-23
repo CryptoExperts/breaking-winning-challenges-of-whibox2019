@@ -1,7 +1,10 @@
 # Breaking WhibOx 2019 Winning Implementations
 
-This repository shares part of attack results performed by [Louis Goubin](http://www.goubin.fr), [Matthieu Rivian](http://matthieurivain.com/) and [Junwei Wang](https://junwei.co/) on breaking the winning implementations of [WhibOx 2019](https://whibox-contest.github.io/2019/) white-box cryptography competition.
+This repository shares part of attack results performed by [Louis Goubin](http://www.goubin.fr), [Matthieu Rivian](http://matthieurivain.com/) and [Junwei Wang](https://junwei.co/) on breaking the three following winning implementations of [WhibOx 2019](https://whibox-contest.github.io/2019/) white-box cryptography competition:
 
+- [\#100 (hopeful_kirch)](100),
+- [\#111 (goofy_lichterman)](111),
+- [\#115 (elegant_turing)](115).
 
 ## Publication
 
@@ -17,6 +20,12 @@ This repository is relevant to the paper "Defeating State-of-the-Art White-Box C
     note = {\url{https://eprint.iacr.org/2020/413}},
 }
 ```
+
+## Miscellany
+
+All three implementations are due to [Biryukov](https://www.cryptolux.org/index.php/Alex_Biryukov) and [Udovenko](http://affine.group/about). We are grateful for their contributions. More information about their work on white-box cryptography are available [here](https://www.cryptolux.org/index.php/Whitebox_cryptography).
+
+Please also find [here](https://github.com/junwei-wang/WhibOx-breaking-adoring-poitras) about on breaking of winning challenge from [WhibOx 2017](https://whibox-contest.github.io/2017/).
 
 
 ## License
