@@ -2,7 +2,7 @@
 
 This folds contains our break of `goofy_lichterman`, the \#115 challenge submitted to [WhibOx 2019](https://whibox-contest.github.io/2019/).
 
-The organization of this folder is as following:
+This folder contains:
 
 - [1_origin](1_origin): Original source code of \#115.
 - [2_de-obfuscated](2_de-obfuscated): De-obfuscated code.

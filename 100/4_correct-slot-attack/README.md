@@ -4,10 +4,14 @@
 
 2. Compile
 
-  - `make`
+  ```
+  make
+  ```
 
 3. Launch the attack
 
-  - `./attack`
+  ```
+  ./attack
+  ```
 
-4. The attack will print the most likely key guess for this target byte.
+4. The attack will print the most likely key candidate for the selected targeting byte by targeting at the selected bit in the output of this s-box in the first round.
