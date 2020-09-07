@@ -8,16 +8,24 @@ This repository shares part of attack results performed by [Louis Goubin](http:/
 
 ## Publication
 
-This repository is relevant to the paper "Defeating State-of-the-Art White-Box Countermeasures with Advanced Gray-Box Attacks" published in [TCHES Volume 2020, Issue 3](https://tches.iacr.org/index.php/TCHES/issue/archive) and [IACR ePrint Archive](https://eprint.iacr.org/2020/413).
+This repository is relevant to the paper "Defeating State-of-the-Art White-Box Countermeasures with Advanced Gray-Box Attacks" published in [TCHES Volume 2020, Issue 3](https://tches.iacr.org/index.php/TCHES/article/view/8597) and [IACR ePrint Archive](https://eprint.iacr.org/2020/413).
 
 
 ```
-@misc{cryptoeprint:2020:413,
-    author = {Louis Goubin and  Matthieu Rivain and Junwei Wang},
-    title = {Defeating State-of-the-Art White-Box Countermeasures with Advanced Gray-Box Attacks},
-    howpublished = {Cryptology ePrint Archive, Report 2020/413},
-    year = {2020},
-    note = {\url{https://eprint.iacr.org/2020/413}},
+@Article{TCHES:GouRivWan20,
+  author =       "Louis Goubin and
+                  Matthieu Rivain and
+                  Junwei Wang",
+  title =        "Defeating State-of-the-Art White-Box Countermeasures",
+  pages =        "454--482",
+  volume =       2020,
+  publisher =    "Ruhr-Universit{\"a}t Bochum",
+  year =         2020,
+  journal =      "{IACR} Transactions on Cryptographic Hardware and Embedded Systems",
+  number =       3,
+  doi =          "10.13154/tches.v2020.i3.454-482",
+  issn =         "2569-2925",
+  note =         "\url{https://tches.iacr.org/index.php/TCHES/article/view/8597}",
 }
 ```
 
